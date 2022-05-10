@@ -7,23 +7,34 @@ import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts';
 import { Pokemon } from '../../interfaces';
 import { localFavorites } from '../../utils';
-
+import confetti from 'canvas-confetti';
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
-  const [isInFavorites, setIsInFavorites] = useState(
-    localFavorites.existsInFavorites(pokemon.id)
-  );
+  const [isInFavorites, setIsInFavorites] = useState(false);
+
+  useEffect(() => {
+    setIsInFavorites(localFavorites.existsInFavorites(pokemon.id));
+  }, []);
 
   const onToggleFavorite = () => {
     setIsInFavorites(!isInFavorites);
     localFavorites.toggleFavorites(pokemon.id);
+
+    if (isInFavorites) return;
+    confetti({
+      zIndex: 999,
+      particleCount: 100,
+      spread: 160,
+      angle: -100,
+      origin: {
+        x: 1,
+        y: 0,
+      },
+    });
   };
-  useEffect(() => {
-    console.log(localStorage.getItem('favorites'));
-  }, []);
 
   return (
     <Layout title={pokemon.name}>
