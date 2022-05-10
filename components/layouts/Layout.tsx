@@ -7,13 +7,18 @@ type Props = {
   title?: string;
 };
 
+const origin = typeof window === 'undefined' ? '' : window.location.origin;
 export const Layout: React.FC<Props> = ({ children, title }) => {
   return (
     <>
       <Head>
         <title>{title || 'Pokemon'}</title>
-        <meta name="description" content="PokeApp description" />
+        <meta name="description" content={`Información sobre ${title}`} />
         <meta name="keywords" content="PokeApp, pokemon, pokedex" />
+
+        <meta property="og:title" content={`Información sobre ${title}`} />
+        <meta property="og:description" content={`Pagina sobre ${title}`} />
+        <meta property="og:image" content={`${origin}/img/banner.png`} />
       </Head>
 
       <Navbar />
